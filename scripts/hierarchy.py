@@ -50,17 +50,19 @@ class HierarchyCommand(Command):
         # find a list of nearby locations pair (as a tuple)
         # [(loc_1, loc_2), (loc_1, loc_8), (loc_5, loc_6), ...]
         # hint: find_nearby_pairs
-
+        pairs = find_nearby_pairs(location_list, MAX_DISTANCE_WITHIN_CLUSTER_IN_METERS)
         # Using nearby pairs as the graph link, group locations as clusters
         # [set([loc_1]), set([loc_4, loc_5, loc_8]), ...]
         # hint: union_find
-
+        clusters = union_find(location_list, pairs)
         # calculate the center of each cluster
         # [(lat, lng), (lat, lng), ...]
         # hint: calculate_centers
-
+        centers = calculate_centers(clusters, location_list, location_weight_list)
         # Find the nearest location to the center in the clusters
         # hint: use nearest
+        nearest_locations = nearest(clusters, centers)
+        return centers, clusters
 
     def run(self, max_distance, file_src, file_dest):
         with open(file_src) as f:
